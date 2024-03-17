@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Select a Country</h1>
+    <form id="countryForm" method="post">
+        <label for="country">Country:</label>
+<!--        <select id="country" name="country">-->
+<!--            {% for country in unique_countries %}-->
+<!--                <option value="{{ country }}">{{ country }}</option>-->
+<!--            {% endfor %}-->
+<!--        </select>-->
+        <select id="country" name="country">
+            {% for country in unique_countries %}
+                {% if country == selected_country %}
+                    <option value="{{ country }}" selected>{{ country }}</option>
+                {% else %}
+                    <option value="{{ country }}">{{ country }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+
+
+    {% if data %}
+        <h2>Filtered Data:</h2>
+        {{ data|safe }}
+        <hr>
+        <h2>Add or Remove Data:</h2>
+        <form id="addRemoveForm" method="post" action="/add_remove">
+            <label for="action">Action:</label>
+            <select id="action" name="action">
+                <option value="add">Add</option>
+                <option value="remove">Remove</option>
+            </select><br><br>
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name"><br><br>
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name"><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email"><br><br>
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+                <option value="Country Focal Point">Country Focal Point</option>
+                <option value="Local Focal Point">Local Focal Point</option>
+            </select><br><br>
+            <input type="hidden" id="selected_country" name="selected_country">
+            <button id="submitButton" type="submit">Submit</button>
+            <p id="dynamicButtonPlaceholder"></p>
+        </form>
+    {% endif %}
+
+    <script>
+        // Get references to form elements
+        var countryForm = document.getElementById('countryForm');
+        var selectedCountryInput = document.getElementById('selected_country');
+        var countrySelect = document.getElementById('country');
+
+        // Add event listener to country select element
+        countrySelect.addEventListener('change', function() {
+            // Update the value of the hidden input field with the selected country
+            selectedCountryInput.value = this.value;
+        });
+
+        // Set the initial value of the hidden input field when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            selectedCountryInput.value = countrySelect.value;
+        });
+    </script>
+
+</body>
+</html>
+
